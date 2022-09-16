@@ -17,7 +17,7 @@ const Header = props => {
         <img
           src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
           alt="website logo"
-          className="logo"
+          className="web-logo"
         />
         <div className="buttons-container">
           <button type="button" className="header-btn">

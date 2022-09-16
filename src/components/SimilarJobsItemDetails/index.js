@@ -9,7 +9,6 @@ const SimilarJobs = props => {
     employmentType,
     jobDescription,
     location,
-    packagePerAnnum,
     rating,
     title,
   } = similarJob

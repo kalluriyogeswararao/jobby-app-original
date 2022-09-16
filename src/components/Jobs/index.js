@@ -79,6 +79,7 @@ class Jobs extends Component {
   getAlljobsDetails = async () => {
     this.setState({apiStatus: apiStatusConstraints.inprogress})
     const {searchInput, employType, salaryRange} = this.state
+    console.log(salaryRange)
 
     const jwtToken = Cookies.get('jwt_token')
     const url = `https://apis.ccbp.in/jobs?employment_type=${employType}&minimum_package=${salaryRange}&search=${searchInput}`
@@ -111,11 +112,34 @@ class Jobs extends Component {
   }
 
   onClickEmployItem = id => {
-    this.setState({employType: id}, this.getAlljobsDetails)
+    const {employType} = this.state
+    let string
+    if (employType.length > 0) {
+      string = [employType, id].join(',')
+    } else {
+      string = id
+    }
+    this.setState(
+      {
+        employType: string,
+      },
+      this.getAlljobsDetails,
+    )
+  }
+
+  onClickRetry = () => {
+    this.getAlljobsDetails()
   }
 
   onClickSalaryRange = id => {
-    this.setState({salaryRange: id}, this.getAlljobsDetails)
+    const {salaryRange} = this.state
+    let salaryString
+    if (salaryRange.length > 0) {
+      salaryString = [salaryRange, id].join(',')
+    } else {
+      salaryString = id
+    }
+    this.setState({salaryRange: salaryString}, this.getAlljobsDetails)
   }
 
   renderInProgress = () => (
@@ -124,7 +148,7 @@ class Jobs extends Component {
     </div>
   )
 
-  renderJobDisplayPage = () => {
+  renderJobs = () => {
     const {jobsDataList} = this.state
 
     return (
@@ -134,6 +158,29 @@ class Jobs extends Component {
         ))}
       </ul>
     )
+  }
+
+  noJobsFound = () => (
+    <div className="no-jobs-container">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
+        alt="no jobs"
+        className="no-jobs"
+      />
+      <h1 className="no-jobs-heading">No Jobs Found</h1>
+      <p className="no-job-description">
+        We could not find any jobs. Try other filters.
+      </p>
+    </div>
+  )
+
+  renderJobDisplayPage = () => {
+    const {jobsDataList} = this.state
+
+    if (jobsDataList.length > 0) {
+      return this.renderJobs()
+    }
+    return this.noJobsFound()
   }
 
   onFailureDisplayJobs = () => (
@@ -147,7 +194,7 @@ class Jobs extends Component {
       <p className="failure-error-msg">
         We cannot seem to find the page you are looking for.
       </p>
-      <button type="button" className="retry-btn">
+      <button type="button" className="retry-btn" onClick={this.onClickRetry}>
         Retry
       </button>
     </div>

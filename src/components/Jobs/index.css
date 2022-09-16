@@ -57,6 +57,7 @@
   color: #ffffff;
   font-size: 18px;
   margin-left: 15px;
+  outline: none;
   margin-right: 15px;
 }
 
@@ -98,4 +99,31 @@
   font-size: 18px;
   color: #ffffff;
   font-family: 'roboto';
+}
+
+.no-jobs-heading {
+  font-family: 'roboto';
+  font-size: 40px;
+  color: #ffffff;
+}
+
+.no-jobs {
+  width: 500px;
+}
+
+.no-jobs-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-job-description {
+  font-size: 15px;
+  color: #ffffff;
+  font-family: 'roboto';
+}
+
+.retry-btn {
+  cursor: pointer;
 }

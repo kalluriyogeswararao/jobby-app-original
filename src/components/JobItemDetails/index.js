@@ -78,6 +78,10 @@ class JonItemDetails extends Component {
     }
   }
 
+  onClickRetry = () => {
+    this.getJobDetils()
+  }
+
   renderInProgress = () => (
     <div className="loader-container">
       <Loader type="ThreeDots" color="#ffffff" height="40" width="40" />
@@ -104,7 +108,7 @@ class JonItemDetails extends Component {
       <p className="failure-error-msg">
         We cannot seem to find the page you are looking for.
       </p>
-      <button type="button" className="retry-btn">
+      <button type="button" className="retry-btn" onClick={this.onClickRetry}>
         Retry
       </button>
     </div>
