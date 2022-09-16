@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import {BsSearch} from 'react-icons/bs'
 import Header from '../Header'
 import Profile from '../Profile'
+import JobItem from '../JobItem'
 
 import './index.css'
 
@@ -52,7 +53,11 @@ const salaryRangesList = [
 ]
 
 class Jobs extends Component {
-  state = {apiStatus: apiStatusConstraints.initial, searchInput: ''}
+  state = {
+    apiStatus: apiStatusConstraints.initial,
+    searchInput: '',
+    jobsDataList: [],
+  }
 
   componentDidMount() {
     this.getAlljobsDetails()
@@ -78,8 +83,36 @@ class Jobs extends Component {
       method: 'GET',
     }
     const response = await fetch(url, options)
-    const data = await response.json()
-    console.log(data)
+    if (response.ok) {
+      const data = await response.json()
+      const updateData = data.jobs.map(eachJob => ({
+        companyLogoUrl: eachJob.company_logo_url,
+        employmentType: eachJob.employment_type,
+        id: eachJob.id,
+        jobDescription: eachJob.job_description,
+        location: eachJob.location,
+        packagePerAnnum: eachJob.package_per_annum,
+        rating: eachJob.rating,
+        title: eachJob.title,
+      }))
+      this.setState({
+        jobsDataList: updateData,
+        apiStatus: apiStatusConstraints.success,
+      })
+      console.log(updateData)
+    }
+  }
+
+  renderJobdDisplayPage = () => {
+    const {jobsDataList} = this.state
+
+    return (
+      <ul>
+        {jobsDataList.map(eachJob => (
+          <JobItem eachJob={eachJob} key={eachJob.id} />
+        ))}
+      </ul>
+    )
   }
 
   render() {
@@ -92,16 +125,25 @@ class Jobs extends Component {
             <hr />
             <h1 className="employment-heading">Type of Employment</h1>
             <ul className="all-types">
-              {employmentTypesList.map(eachType => (
-                <li className="employ-item" key={eachType.employmentTypeId}>
-                  <input
-                    type="checkbox"
-                    className="checkbox"
-                    id={eachType.label}
-                  />
-                  <label htmlFor={eachType.label}>{eachType.label}</label>
-                </li>
-              ))}
+              {employmentTypesList.map(eachType => {
+                const onClickEmployId = () => {
+                  console.log(eachType.employmentTypeId)
+                }
+
+                return (
+                  <li className="employ-item" key={eachType.employmentTypeId}>
+                    <input
+                      type="checkbox"
+                      className="checkbox"
+                      id={eachType.employmentTypeId}
+                      onClick={onClickEmployId}
+                    />
+                    <label htmlFor={eachType.employmentTypeId}>
+                      {eachType.label}
+                    </label>
+                  </li>
+                )
+              })}
             </ul>
             <hr />
             <h1 className="employment-heading">Salary Range</h1>
@@ -111,9 +153,11 @@ class Jobs extends Component {
                   <input
                     type="radio"
                     className="checkbox"
-                    id={eachItem.label}
+                    id={eachItem.salaryRangeId}
                   />
-                  <label htmlFor={eachItem.label}>{eachItem.label}</label>
+                  <label htmlFor={eachItem.salaryRangeId}>
+                    {eachItem.label}
+                  </label>
                 </li>
               ))}
             </ul>
@@ -134,6 +178,7 @@ class Jobs extends Component {
                 <BsSearch className="search-icon" />
               </button>
             </div>
+            <div className="jobs-display">{this.renderJobdDisplayPage()}</div>
           </div>
         </div>
       </div>
