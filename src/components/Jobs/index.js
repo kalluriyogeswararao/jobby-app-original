@@ -1,9 +1,12 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
 import {BsSearch} from 'react-icons/bs'
+import Loader from 'react-loader-spinner'
 import Header from '../Header'
 import Profile from '../Profile'
 import JobItem from '../JobItem'
+import EmployType from '../EmployType'
+import SalaryRange from '../SalaryRange'
 
 import './index.css'
 
@@ -57,6 +60,8 @@ class Jobs extends Component {
     apiStatus: apiStatusConstraints.initial,
     searchInput: '',
     jobsDataList: [],
+    employType: '',
+    salaryRange: '',
   }
 
   componentDidMount() {
@@ -72,10 +77,11 @@ class Jobs extends Component {
   }
 
   getAlljobsDetails = async () => {
-    const {searchInput} = this.state
     this.setState({apiStatus: apiStatusConstraints.inprogress})
+    const {searchInput, employType, salaryRange} = this.state
+
     const jwtToken = Cookies.get('jwt_token')
-    const url = `https://apis.ccbp.in/jobs?employment_type=FULLTIME&minimum_package=1000000&search=${searchInput}`
+    const url = `https://apis.ccbp.in/jobs?employment_type=${employType}&minimum_package=${salaryRange}&search=${searchInput}`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -99,11 +105,26 @@ class Jobs extends Component {
         jobsDataList: updateData,
         apiStatus: apiStatusConstraints.success,
       })
-      console.log(updateData)
+    } else {
+      this.setState({apiStatus: apiStatusConstraints.failure})
     }
   }
 
-  renderJobdDisplayPage = () => {
+  onClickEmployItem = id => {
+    this.setState({employType: id}, this.getAlljobsDetails)
+  }
+
+  onClickSalaryRange = id => {
+    this.setState({salaryRange: id}, this.getAlljobsDetails)
+  }
+
+  renderInProgress = () => (
+    <div className="loader-container">
+      <Loader type="ThreeDots" color="#ffffff" height="40" width="40" />
+    </div>
+  )
+
+  renderJobDisplayPage = () => {
     const {jobsDataList} = this.state
 
     return (
@@ -113,6 +134,39 @@ class Jobs extends Component {
         ))}
       </ul>
     )
+  }
+
+  onFailureDisplayJobs = () => (
+    <div className="failure-container">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+        alt="failure view"
+        className="failure-view"
+      />
+      <h1 className="oops-error">Oops! Something Went Wrong</h1>
+      <p className="failure-error-msg">
+        We cannot seem to find the page you are looking for.
+      </p>
+      <button type="button" className="retry-btn">
+        Retry
+      </button>
+    </div>
+  )
+
+  allJobsDisplayDetails = () => {
+    const {apiStatus} = this.state
+
+    switch (apiStatus) {
+      case apiStatusConstraints.inprogress:
+        return this.renderInProgress()
+      case apiStatusConstraints.success:
+        return this.renderJobDisplayPage()
+      case apiStatusConstraints.failure:
+        return this.onFailureDisplayJobs()
+
+      default:
+        return null
+    }
   }
 
   render() {
@@ -125,40 +179,23 @@ class Jobs extends Component {
             <hr />
             <h1 className="employment-heading">Type of Employment</h1>
             <ul className="all-types">
-              {employmentTypesList.map(eachType => {
-                const onClickEmployId = () => {
-                  console.log(eachType.employmentTypeId)
-                }
-
-                return (
-                  <li className="employ-item" key={eachType.employmentTypeId}>
-                    <input
-                      type="checkbox"
-                      className="checkbox"
-                      id={eachType.employmentTypeId}
-                      onClick={onClickEmployId}
-                    />
-                    <label htmlFor={eachType.employmentTypeId}>
-                      {eachType.label}
-                    </label>
-                  </li>
-                )
-              })}
+              {employmentTypesList.map(eachType => (
+                <EmployType
+                  eachType={eachType}
+                  key={eachType.employmentTypeId}
+                  onClickEmployItem={this.onClickEmployItem}
+                />
+              ))}
             </ul>
             <hr />
             <h1 className="employment-heading">Salary Range</h1>
             <ul className="all-types">
               {salaryRangesList.map(eachItem => (
-                <li className="employ-item" key={eachItem.salaryRangeId}>
-                  <input
-                    type="radio"
-                    className="checkbox"
-                    id={eachItem.salaryRangeId}
-                  />
-                  <label htmlFor={eachItem.salaryRangeId}>
-                    {eachItem.label}
-                  </label>
-                </li>
+                <SalaryRange
+                  eachItem={eachItem}
+                  key={eachItem.salaryRangeId}
+                  onClickSalaryRange={this.onClickSalaryRange}
+                />
               ))}
             </ul>
           </div>
@@ -178,7 +215,7 @@ class Jobs extends Component {
                 <BsSearch className="search-icon" />
               </button>
             </div>
-            <div className="jobs-display">{this.renderJobdDisplayPage()}</div>
+            <div className="jobs-display">{this.allJobsDisplayDetails()}</div>
           </div>
         </div>
       </div>

@@ -84,10 +84,10 @@ class LoginForm extends Component {
                 onChange={this.onChangePassword}
               />
             </div>
-            {showErrorMsg && <p className="error-msg">{errorMsg}</p>}
             <button type="submit" className="login-btn">
               Login
             </button>
+            {showErrorMsg && <p className="error-msg">{errorMsg}</p>}
           </form>
         </div>
       </div>

@@ -1,0 +1,9 @@
+.similar-job-container {
+  background-color: #272727;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 15px;
+  width: 320px;
+}
