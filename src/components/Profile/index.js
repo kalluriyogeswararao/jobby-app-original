@@ -55,7 +55,7 @@ class Profile extends Component {
 
     return (
       <div className="profile-container">
-        <img src={imageUrl} alt={name} className="profile-image" />
+        <img src={imageUrl} alt="profile" className="profile-image" />
         <h1 className="profile-name">{name}</h1>
         <p className="profile-bio">{shortBio}</p>
       </div>
@@ -68,9 +68,17 @@ class Profile extends Component {
     </div>
   )
 
+  onClickRetryProfile = () => {
+    this.getProfileDetails()
+  }
+
   onFailureProfile = () => (
     <div>
-      <button type="button" className="retry-btn">
+      <button
+        type="button"
+        className="retry-btn"
+        onClick={this.onClickRetryProfile}
+      >
         Retry
       </button>
     </div>

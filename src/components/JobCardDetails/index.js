@@ -1,6 +1,7 @@
 import {MdLocationOn} from 'react-icons/md'
 import {BsFillBriefcaseFill} from 'react-icons/bs'
 import SimilarJobsItemDetails from '../SimilarJobsItemDetails'
+import Skills from '../Skills'
 import './index.css'
 
 const JobCardDetails = props => {
@@ -9,6 +10,7 @@ const JobCardDetails = props => {
   const {
     companyLogoUrl,
     employmentType,
+    companyWebsiteUrl,
     jobDescription,
     location,
     packagePerAnnum,
@@ -23,7 +25,11 @@ const JobCardDetails = props => {
     <div className="job-card-bg-container">
       <div className="job-card-container">
         <div className="job-details-container">
-          <img src={companyLogoUrl} alt={title} className="logo" />
+          <img
+            src={companyLogoUrl}
+            alt="job details company logo"
+            className="logo"
+          />
           <div>
             <h1 className="job-title">{title}</h1>
             <div className="job-rating-container">
@@ -48,28 +54,22 @@ const JobCardDetails = props => {
             </div>
           </div>
           <p className="salary">{packagePerAnnum}</p>
+          <a href={companyWebsiteUrl}>Visit</a>
         </div>
         <hr className="hr-line" />
         <h1 className="description-card-heading">Description</h1>
         <p className="description">{jobDescription}</p>
 
-        <p className="skills-heading">Skills</p>
+        <h1 className="skills-heading">Skills</h1>
         <ul className="all-skills">
           {skills.map(eachSkill => (
-            <div className="skill-container">
-              <img
-                src={eachSkill.imageUrl}
-                alt={eachSkill.name}
-                className="skill-logo"
-              />
-              <p className="skill-name">{eachSkill.name}</p>
-            </div>
+            <Skills eachSkill={eachSkill} key={eachSkill.name} />
           ))}
         </ul>
         <h1 className="life-at-company">Life At Company</h1>
         <div className="life-container">
           <p className="life-at-company-description ">{description}</p>
-          <img src={imageUrl} alt="company" className="life-image" />
+          <img src={imageUrl} alt="life at company" className="life-image" />
         </div>
       </div>
 

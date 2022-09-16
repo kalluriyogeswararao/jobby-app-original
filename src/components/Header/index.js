@@ -14,14 +14,18 @@ const Header = props => {
   return (
     <div className="bg-container">
       <div className="header-details-container">
-        <img
-          src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
-          alt="website logo"
-          className="web-logo"
-        />
+        <Link to="/">
+          <img
+            src="https://assets.ccbp.in/frontend/react-js/logo-img.png"
+            alt="website logo"
+            className="web-logo"
+          />
+        </Link>
         <div className="buttons-container">
           <button type="button" className="header-btn">
-            <AiFillHome />
+            <li>
+              <AiFillHome />
+            </li>
           </button>
           <button type="button" className="header-btn">
             <BsFillBriefcaseFill />

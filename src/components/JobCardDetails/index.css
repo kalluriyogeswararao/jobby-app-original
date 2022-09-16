@@ -58,23 +58,6 @@
   padding-left: 0;
 }
 
-.skill-container {
-  display: flex;
-  align-items: center;
-  width: 300px;
-  margin-bottom: 50px;
-}
-
-.skill-name {
-  font-size: 15px;
-  color: #ffffff;
-}
-
-.skill-logo {
-  width: 50px;
-  margin-right: 20px;
-}
-
 .life-at-company {
   font-size: 20px;
   color: #ffffff;

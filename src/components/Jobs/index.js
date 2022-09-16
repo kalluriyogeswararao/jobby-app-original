@@ -69,7 +69,7 @@ class Jobs extends Component {
   }
 
   onChangeSearchInput = event => {
-    this.setState({searchInput: event.target.value.toLowerCase()})
+    this.setState({searchInput: event.target.value})
   }
 
   onClickSearch = () => {
@@ -79,7 +79,6 @@ class Jobs extends Component {
   getAlljobsDetails = async () => {
     this.setState({apiStatus: apiStatusConstraints.inprogress})
     const {searchInput, employType, salaryRange} = this.state
-    console.log(salaryRange)
 
     const jwtToken = Cookies.get('jwt_token')
     const url = `https://apis.ccbp.in/jobs?employment_type=${employType}&minimum_package=${salaryRange}&search=${searchInput}`
@@ -217,6 +216,7 @@ class Jobs extends Component {
   }
 
   render() {
+    const {searchInput} = this.state
     return (
       <div className="total-container">
         <Header />
@@ -253,6 +253,7 @@ class Jobs extends Component {
                 className="search-input"
                 placeholder="Search"
                 onChange={this.onChangeSearchInput}
+                value={searchInput}
               />
               <button
                 type="button"
